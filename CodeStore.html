@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="hi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deva CodeStore - Premium Source Code & Scripts Marketplace</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f3ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#1e1b4b',
+                        },
+                        accent: '#10b981',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-border {
+            border: 1px solid transparent;
+            background-image: linear-gradient(rgba(15, 23, 42, 1), rgba(15, 23, 42, 1)), linear-gradient(135deg, #6366f1, #10b981, #ec4899);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+        .glow-effect:hover {
+            box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.4);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- HEADER / NAVBAR -->
+    <header class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            
+            <!-- Logo -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="resetFilters()">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-violet-600 to-emerald-400 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                    <i class="fa-solid fa-code text-xl text-white"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-extrabold bg-gradient-to-r from-white via-indigo-200 to-indigo-400 bg-clip-text text-transparent">Deva CodeStore</span>
+                    <span class="block text-[10px] text-emerald-400 font-semibold tracking-wider uppercase">Source Code Marketplace</span>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="flex-1 max-w-md hidden md:block">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search scripts, React apps, Python bots..." class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800/80 border border-slate-700/80 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-slate-200 placeholder-slate-400 transition">
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center space-x-3">
+                <button onclick="toggleAdminPanel()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 border border-slate-700 text-indigo-300 flex items-center gap-2 transition">
+                    <i class="fa-solid fa-plus-circle text-indigo-400"></i>
+                    <span class="hidden sm:inline">Seller Portal</span>
+                </button>
+                
+                <button onclick="openCart()" class="relative p-2.5 rounded-xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 hover:bg-indigo-600 hover:text-white transition group">
+                    <i class="fa-solid fa-cart-shopping text-lg"></i>
+                    <span id="cartBadge" class="absolute -top-2 -right-2 bg-emerald-500 text-slate-950 text-xs font-bold px-2 py-0.5 rounded-full shadow-lg hidden">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Search Input -->
+        <div class="px-4 pb-3 md:hidden">
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" id="mobileSearchInput" oninput="handleSearch()" placeholder="Search source code..." class="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-800/80 border border-slate-700 text-sm focus:outline-none focus:border-indigo-500 text-slate-200">
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO BANNER -->
+    <section class="relative overflow-hidden py-12 md:py-16 border-b border-slate-800/60 bg-gradient-to-b from-slate-900/50 to-slate-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold mb-4">
+                <i class="fa-solid fa-bolt text-emerald-400"></i> Verified & Ready-to-Deploy Source Code
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4 leading-tight">
+                Buy Premium <span class="bg-gradient-to-r from-indigo-400 via-violet-400 to-emerald-400 bg-clip-text text-transparent">Scripts, Code & Projects</span>
+            </h1>
+            <p class="max-w-2xl mx-auto text-slate-400 text-sm sm:text-base mb-8">
+                Build faster with pre-made React apps, Python automation bots, Full-stack Web VFX templates, and Machine Learning scripts with instant download access.
+            </p>
+
+            <!-- Category Filter Pills -->
+            <div class="flex flex-wrap items-center justify-center gap-2 max-w-3xl mx-auto" id="categoryPills">
+                <!-- Javascript dynamic loading -->
+            </div>
+        </div>
+
+        <!-- Glowing Background Accent -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none"></div>
+    </section>
+
+    <!-- MAIN PRODUCT CATALOG SECTION -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        <!-- Controls Bar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+            <div>
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-fire text-amber-400"></i> Available Source Codes
+                </h2>
+                <p id="productCount" class="text-xs text-slate-400">Showing all code templates</p>
+            </div>
+            <div class="flex items-center gap-2 self-end sm:self-auto">
+                <label for="sortSelect" class="text-xs text-slate-400">Sort by:</label>
+                <select id="sortSelect" onchange="renderProducts()" class="bg-slate-900 border border-slate-700 text-xs text-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500">
+                    <option value="featured">Featured</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="rating">Highest Rated</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Dynamic Content Load -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-16 bg-slate-900/40 rounded-2xl border border-slate-800">
+            <i class="fa-solid fa-code-slash text-4xl text-slate-600 mb-3"></i>
+            <h3 class="text-lg font-semibold text-slate-300">No codes found</h3>
+            <p class="text-sm text-slate-500 mt-1">Try searching for something else or clear the selected category filter.</p>
+            <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-medium transition">Reset Filters</button>
+        </div>
+    </main>
+
+    <!-- ADMIN ADD PRODUCT MODAL/PANEL -->
+    <div id="adminModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-6 border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-600/20 text-indigo-400 flex items-center justify-center">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">Sell Your Code / Script</h3>
+                </div>
+                <button onclick="toggleAdminPanel()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <form id="adminForm" onsubmit="handleAddProduct(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Code / Project Title</label>
+                    <input type="text" id="adminTitle" required placeholder="e.g. AI Image Generator SaaS App" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white focus:border-indigo-500 focus:outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Category</label>
+                        <select id="adminCategory" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white focus:border-indigo-500 focus:outline-none">
+                            <option value="Python">Python</option>
+                            <option value="React">React</option>
+                            <option value="Web VFX">Web VFX</option>
+                            <option value="ML / AI">ML / AI</option>
+                            <option value="Scripts">Scripts</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Price (₹ INR)</label>
+                        <input type="number" id="adminPrice" required min="0" placeholder="e.g. 499" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white focus:border-indigo-500 focus:outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Tech Stack (comma separated)</label>
+                    <input type="text" id="adminStack" required placeholder="e.g. React, Tailwind, Node.js, OpenAI API" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white focus:border-indigo-500 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Description</label>
+                    <textarea id="adminDesc" rows="3" required placeholder="Describe key features, setup steps, and utility..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white focus:border-indigo-500 focus:outline-none"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Zip File Download Link / Google Drive URL</label>
+                    <input type="url" id="adminFileUrl" required placeholder="https://drive.google.com/file/d/your-zip-file" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white focus:border-indigo-500 focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Interactive Code Demo Snippet (HTML/JS Preview)</label>
+                    <textarea id="adminDemoCode" rows="3" placeholder="<div><h1>Demo Canvas Code</h1></div>" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-xs font-mono text-emerald-300 focus:border-indigo-500 focus:outline-none"></textarea>
+                </div>
+
+                <div class="pt-4 flex gap-3">
+                    <button type="button" onclick="toggleAdminPanel()" class="w-1/2 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold transition">Cancel</button>
+                    <button type="submit" class="w-1/2 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold shadow-lg shadow-indigo-600/30 transition">Publish Code Product</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- PRODUCT DETAILS MODAL -->
+    <div id="productDetailModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative">
+            <button onclick="closeDetailModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div id="detailModalContent">
+                <!-- Dynamically Populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CART DRAWER -->
+    <div id="cartDrawer" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-slate-900 border-l border-slate-800 z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col shadow-2xl">
+        <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-bag-shopping text-indigo-400 text-lg"></i>
+                <h3 class="font-bold text-white">Your Cart</h3>
+            </div>
+            <button onclick="closeCart()" class="text-slate-400 hover:text-white p-1">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Cart Items List -->
+        <div id="cartItemsContainer" class="flex-grow p-5 overflow-y-auto space-y-4">
+            <!-- Dynamic Items -->
+        </div>
+
+        <!-- Cart Footer -->
+        <div class="p-5 border-t border-slate-800 bg-slate-900/90 space-y-4">
+            <div class="flex justify-between text-sm">
+                <span class="text-slate-400">Total Price:</span>
+                <span id="cartTotalPrice" class="font-bold text-emerald-400 text-lg">₹0</span>
+            </div>
+            <button onclick="openCheckoutModal()" id="checkoutBtn" disabled class="w-full py-3 bg-gradient-to-r from-indigo-600 to-emerald-500 disabled:opacity-50 hover:opacity-90 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-lock text-xs"></i> Proceed to Checkout
+            </button>
+        </div>
+    </div>
+
+    <!-- CHECKOUT & PAYMENT MODAL -->
+    <div id="checkoutModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl relative">
+            <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div id="paymentFlow">
+                <div class="text-center mb-6">
+                    <div class="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-400 mx-auto flex items-center justify-center mb-2">
+                        <i class="fa-solid fa-shield-halved text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Instant Payment Simulation</h3>
+                    <p class="text-xs text-slate-400">Pay securely via UPI, Cards, or Net Banking</p>
+                </div>
+
+                <div class="bg-slate-800/60 p-3.5 rounded-xl border border-slate-700/80 mb-5 flex justify-between items-center text-sm">
+                    <span class="text-slate-300">Amount Payable:</span>
+                    <span id="paymentTotal" class="font-extrabold text-emerald-400 text-lg">₹0</span>
+                </div>
+
+                <!-- Payment Options Tabs -->
+                <div class="space-y-3 mb-6">
+                    <label class="flex items-center p-3 rounded-xl border border-slate-700 bg-slate-800/40 cursor-pointer hover:border-indigo-500 transition">
+                        <input type="radio" name="paymentMethod" value="UPI" checked class="text-indigo-600 focus:ring-0">
+                        <span class="ml-3 text-sm font-medium text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-mobile-screen text-indigo-400"></i> UPI (Google Pay, PhonePe, Paytm)
+                        </span>
+                    </label>
+                    <label class="flex items-center p-3 rounded-xl border border-slate-700 bg-slate-800/40 cursor-pointer hover:border-indigo-500 transition">
+                        <input type="radio" name="paymentMethod" value="Card" class="text-indigo-600 focus:ring-0">
+                        <span class="ml-3 text-sm font-medium text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-credit-card text-emerald-400"></i> Debit / Credit Card
+                        </span>
+                    </label>
+                    <label class="flex items-center p-3 rounded-xl border border-slate-700 bg-slate-800/40 cursor-pointer hover:border-indigo-500 transition">
+                        <input type="radio" name="paymentMethod" value="NetBanking" class="text-indigo-600 focus:ring-0">
+                        <span class="ml-3 text-sm font-medium text-slate-200 flex items-center gap-2">
+                            <i class="fa-solid fa-building-columns text-purple-400"></i> Net Banking
+                        </span>
+                    </label>
+                </div>
+
+                <button onclick="processPayment()" id="payConfirmBtn" class="w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-check-circle"></i> Complete Payment & Download Code
+                </button>
+            </div>
+
+            <!-- SUCCESS CONFIRMATION VIEW (Hidden by default) -->
+            <div id="paymentSuccess" class="hidden text-center py-6">
+                <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+                    <i class="fa-solid fa-circle-check text-3xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-2">Payment Successful!</h3>
+                <p class="text-xs text-slate-400 mb-6">Thank you for purchasing from Deva CodeStore. Your source code bundle is ready for instant download below.</p>
+                
+                <div id="downloadLinksContainer" class="space-y-3 max-h-48 overflow-y-auto mb-6 text-left">
+                    <!-- Dynamic Download buttons -->
+                </div>
+
+                <button onclick="finishOrder()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl text-xs transition">
+                    Close & Continue Browsing
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 border-t border-slate-800 mt-auto py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center sm:flex sm:justify-between sm:items-center">
+            <div class="flex items-center justify-center space-x-2 mb-4 sm:mb-0">
+                <div class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center text-white text-xs font-bold">
+                    D
+                </div>
+                <span class="font-bold text-slate-200">Deva CodeStore</span>
+            </div>
+            <p class="text-xs text-slate-500">© 2026 Deva CodeStore. Instant delivery for verified source code scripts.</p>
+            <div class="flex justify-center space-x-4 mt-4 sm:mt-0 text-slate-400 text-sm">
+                <a href="#" class="hover:text-indigo-400"><i class="fa-brands fa-github"></i></a>
+                <a href="#" class="hover:text-indigo-400"><i class="fa-brands fa-discord"></i></a>
+                <a href="#" class="hover:text-indigo-400"><i class="fa-brands fa-twitter"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // INITIAL PRODUCT DATA STORE
+        const initialProducts = [
+            {
+                id: 'code-01',
+                title: 'Automated WhatsApp & Telegram Bot Script',
+                category: 'Python',
+                price: 399,
+                rating: 4.9,
+                sales: 128,
+                stack: ['Python 3', 'Selenium', 'Telethon', 'PyAutoGUI'],
+                description: 'Full source code for an automated marketing bot capable of auto-replying, sending bulk user notifications, and tracking analytics without API limits.',
+                fileUrl: 'https://example.com/downloads/whatsapp-telegram-bot.zip',
+                features: ['Auto messaging engine', 'Interactive CLI dashboard', 'Proxy rotator integration', 'Comprehensive documentation'],
+                includedFiles: ['main.py', 'config.json', 'requirements.txt', 'README.md'],
+                demoCode: `
+                    <div style="background:#0f172a; color:#10b981; padding:15px; font-family:monospace; border-radius:8px; font-size:12px;">
+                        <p>[INFO] Starting Deva WhatsApp Bot Automation Engine v2.1...</p>
+                        <p>[CONNECTED] Telethon session established successfully.</p>
+                        <p>[SUCCESS] 142 messages dispatched to target queue.</p>
+                        <p style="color:#6366f1;">> Bot running in background mode listening for Webhooks...</p>
+                    </div>
+                `
+            },
+            {
+                id: 'code-02',
+                title: '3D Particle Interactive Canvas Portal',
+                category: 'Web VFX',
+                price: 299,
+                rating: 4.8,
+                sales: 94,
+                stack: ['HTML5', 'Three.js', 'Tailwind CSS', 'WebGL'],
+                description: 'Stunning customizable 3D particle background effects for modern landing pages with mouse cursor gravitational pull and light dispersion controls.',
+                fileUrl: 'https://example.com/downloads/webgl-3d-particles.zip',
+                features: ['High 60FPS performance', 'Touch gesture responsive', 'Zero dependencies required', 'Pre-configured color palettes'],
+                includedFiles: ['index.html', 'particles.js', 'style.css'],
+                demoCode: `
+                    <div style="height:120px; background:radial-gradient(circle, rgba(99,102,241,0.3) 0%, rgba(15,23,42,1) 100%); display:flex; align-items:center; justify-center; font-family:sans-serif; color:#fff; border-radius:8px;">
+                        <p style="text-align:center;">✨ Move cursor here for 3D Mesh Particle Field Effect</p>
+                    </div>
+                `
+            },
+            {
+                id: 'code-03',
+                title: 'Fullstack AI Image Generator Web App',
+                category: 'React',
+                price: 799,
+                rating: 5.0,
+                sales: 210,
+                stack: ['React 18', 'Tailwind CSS', 'Node.js', 'OpenAI API'],
+                description: 'Ready-to-launch AI Text-to-Image creation web portal with user credits system, download options, dark theme UI, and Stripe billing code.',
+                fileUrl: 'https://example.com/downloads/react-ai-generator.zip',
+                features: ['Complete React JSX components', 'REST API backend included', 'Pre-built user dashboard', 'Responsive grid gallery'],
+                includedFiles: ['src/App.jsx', 'server/index.js', 'package.json'],
+                demoCode: `
+                    <div style="background:#1e293b; padding:15px; border-radius:8px; color:#fff; font-size:12px;">
+                        <p style="font-weight:bold; color:#a78bfa;">Prompt: "Cyberpunk neon city floating island, 8k render"</p>
+                        <div style="margin-top:8px; height:50px; background:linear-gradient(90deg, #ec4899, #8b5cf6, #3b82f6); border-radius:6px; display:flex; align-items:center; justify-center; font-weight:bold;">Generating Image Sample...</div>
+                    </div>
+                `
+            },
+            {
+                id: 'code-04',
+                title: 'Crypto Price Prediction ML Pipeline',
+                category: 'ML / AI',
+                price: 599,
+                rating: 4.7,
+                sales: 83,
+                stack: ['Python', 'TensorFlow', 'Pandas', 'Scikit-Learn'],
+                description: 'Pre-trained Machine Learning model for forecasting Bitcoin and Ethereum price trends using historical market data and sentiment analysis.',
+                fileUrl: 'https://example.com/downloads/crypto-ml-model.zip',
+                features: ['LSTM neural network architecture', 'Auto dataset loader script', '91.2% historical accuracy', 'Jupyter notebook included'],
+                includedFiles: ['model.ipynb', 'train.py', 'btc_history.csv', 'requirements.txt'],
+                demoCode: `
+                    <div style="background:#0f172a; padding:15px; border-radius:8px; font-family:monospace; color:#38bdf8; font-size:12px;">
+                        <p>Epoch 50/50 - loss: 0.0014 - val_loss: 0.0018</p>
+                        <p style="color:#10b981;">[PREDICTION] BTC Next 24H Forecast Range: $94,200 - $96,500 (+2.4%)</p>
+                    </div>
+                `
+            },
+            {
+                id: 'code-05',
+                title: 'High Frequency Web Scraper & API Converter',
+                category: 'Scripts',
+                price: 249,
+                rating: 4.6,
+                sales: 156,
+                stack: ['Node.js', 'Puppeteer', 'Express.js'],
+                description: 'Convert any website content into clean JSON REST APIs instantly. Includes anti-bot bypass headers and automated proxy rotating script.',
+                fileUrl: 'https://example.com/downloads/scraper-api-converter.zip',
+                features: ['Bypasses Cloudflare checks', 'JSON output formatting', 'Concurrent request worker pool', 'Easy deployment to Vercel/Render'],
+                includedFiles: ['scraper.js', 'api.js', 'package.json'],
+                demoCode: `
+                    <div style="background:#0284c7; color:#fff; padding:12px; border-radius:8px; font-family:monospace; font-size:11px;">
+                        GET /api/v1/scrape?url=https://news.ycombinator.com<br/>
+                        Status: 200 OK [Response Time: 120ms]
+                    </div>
+                `
+            }
+        ];
+
+        // GLOBAL APPLICATION STATE
+        let products = JSON.parse(localStorage.getItem('deva_products')) || initialProducts;
+        let cart = [];
+        let activeCategory = 'All';
+
+        const categories = ['All', 'Python', 'React', 'Web VFX', 'ML / AI', 'Scripts'];
+
+        // INIT ON PAGE LOAD
+        window.addEventListener('DOMContentLoaded', () => {
+            renderCategories();
+            renderProducts();
+            updateCartUI();
+        });
+
+        // RENDER CATEGORY FILTER PILLS
+        function renderCategories() {
+            const container = document.getElementById('categoryPills');
+            container.innerHTML = categories.map(cat => `
+                <button onclick="setCategory('${cat}')" class="px-4 py-2 rounded-xl text-xs font-semibold transition border ${
+                    activeCategory === cat 
+                    ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/30' 
+                    : 'bg-slate-800/80 border-slate-700/80 text-slate-300 hover:border-slate-500'
+                }">
+                    ${cat === 'All' ? '<i class="fa-solid fa-border-all mr-1"></i>' : ''}${cat}
+                </button>
+            `).join('');
+        }
+
+        function setCategory(cat) {
+            activeCategory = cat;
+            renderCategories();
+            renderProducts();
+        }
+
+        function resetFilters() {
+            activeCategory = 'All';
+            document.getElementById('searchInput').value = '';
+            document.getElementById('mobileSearchInput').value = '';
+            renderCategories();
+            renderProducts();
+        }
+
+        function handleSearch() {
+            renderProducts();
+        }
+
+        // RENDER PRODUCT CATALOG GRID
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            const emptyState = document.getElementById('emptyState');
+            const searchVal = (document.getElementById('searchInput').value || document.getElementById('mobileSearchInput').value || '').toLowerCase();
+            const sortVal = document.getElementById('sortSelect').value;
+
+            // Filter logic
+            let filtered = products.filter(item => {
+                const matchesCat = activeCategory === 'All' || item.category === activeCategory;
+                const matchesSearch = item.title.toLowerCase().includes(searchVal) || 
+                                      item.description.toLowerCase().includes(searchVal) ||
+                                      item.stack.some(s => s.toLowerCase().includes(searchVal));
+                return matchesCat && matchesSearch;
+            });
+
+            // Sorting logic
+            if (sortVal === 'price-low') filtered.sort((a, b) => a.price - b.price);
+            else if (sortVal === 'price-high') filtered.sort((a, b) => b.price - a.price);
+            else if (sortVal === 'rating') filtered.sort((a, b) => b.rating - a.rating);
+
+            document.getElementById('productCount').innerText = `Showing ${filtered.length} code script(s)`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+
+            grid.innerHTML = filtered.map(item => `
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between hover:border-indigo-500/50 glow-effect transition duration-300">
+                    <div>
+                        <!-- Header / Tag -->
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold tracking-wider uppercase bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+                                ${item.category}
+                            </span>
+                            <div class="flex items-center text-amber-400 text-xs font-semibold">
+                                <i class="fa-solid fa-star mr-1"></i> ${item.rating}
+                            </div>
+                        </div>
+
+                        <!-- Title & Description -->
+                        <h3 class="font-bold text-white text-base mb-2 line-clamp-1 hover:text-indigo-300 cursor-pointer" onclick="openDetailModal('${item.id}')">
+                            ${item.title}
+                        </h3>
+                        <p class="text-slate-400 text-xs mb-4 line-clamp-2 leading-relaxed">
+                            ${item.description}
+                        </p>
+
+                        <!-- Tech Stack Tags -->
+                        <div class="flex flex-wrap gap-1.5 mb-5">
+                            ${item.stack.slice(0, 3).map(stk => `
+                                <span class="px-2 py-0.5 rounded bg-slate-800 text-[10px] text-slate-300 font-mono">
+                                    ${stk}
+                                </span>
+                            `).join('')}
+                            ${item.stack.length > 3 ? `<span class="text-[10px] text-slate-500 align-self-center">+${item.stack.length - 3} more</span>` : ''}
+                        </div>
+                    </div>
+
+                    <!-- Footer / Price & Actions -->
+                    <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between mt-auto">
+                        <div>
+                            <span class="text-[10px] text-slate-500 block uppercase">Price</span>
+                            <span class="text-xl font-extrabold text-emerald-400">₹${item.price}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="openDetailModal('${item.id}')" title="Preview Code" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium transition">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                            <button onclick="addToCart('${item.id}')" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md shadow-indigo-600/30 transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-cart-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // DETAIL MODAL LOGIC
+        function openDetailModal(id) {
+            const item = products.find(p => p.id === id);
+            if (!item) return;
+
+            const modalContent = document.getElementById('detailModalContent');
+            modalContent.innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-1 rounded-lg text-xs font-bold uppercase bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">${item.category}</span>
+                        <span class="text-xs text-slate-400"><i class="fa-solid fa-download mr-1"></i> ${item.sales} Sales</span>
+                    </div>
+
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-white mb-2">${item.title}</h2>
+                        <p class="text-sm text-slate-300 leading-relaxed">${item.description}</p>
+                    </div>
+
+                    <!-- Tech Stack -->
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Technologies Used</h4>
+                        <div class="flex flex-wrap gap-2">
+                            ${item.stack.map(s => `<span class="px-2.5 py-1 rounded-lg bg-slate-800 text-xs text-indigo-300 font-mono">${s}</span>`).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Key Features -->
+                    ${item.features ? `
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Key Highlights</h4>
+                        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-300">
+                            ${item.features.map(f => `<li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> ${f}</li>`).join('')}
+                        </ul>
+                    </div>
+                    ` : ''}
+
+                    <!-- Code Interactive Preview Frame -->
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Interactive Output Preview</h4>
+                        <div class="rounded-xl border border-slate-800 bg-slate-950 p-3">
+                            ${item.demoCode || '<p class="text-xs text-slate-500">No preview generated</p>'}
+                        </div>
+                    </div>
+
+                    <!-- Files Included -->
+                    ${item.includedFiles ? `
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-400 uppercase mb-2">Included Source Files (.zip)</h4>
+                        <div class="flex flex-wrap gap-2 text-xs font-mono text-slate-400">
+                            ${item.includedFiles.map(f => `<span class="bg-slate-800/60 px-2.5 py-1 rounded border border-slate-700/60"><i class="fa-solid fa-file-code text-indigo-400 mr-1.5"></i>${f}</span>`).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+
+                    <!-- Action Bar -->
+                    <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs text-slate-400 block">Single License Price</span>
+                            <span class="text-2xl font-extrabold text-emerald-400">₹${item.price}</span>
+                        </div>
+                        <div class="flex gap-3">
+                            <button onclick="addToCart('${item.id}'); closeDetailModal();" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-lg transition">
+                                <i class="fa-solid fa-cart-shopping mr-1.5"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('productDetailModal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('productDetailModal').classList.add('hidden');
+        }
+
+        // CART MANAGEMENT
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+
+            const existing = cart.find(item => item.id === id);
+            if (!existing) {
+                cart.push(product);
+                updateCartUI();
+                showToast(`"${product.title}" added to cart!`);
+            } else {
+                showToast(`Item is already in your cart!`);
+            }
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cartBadge');
+            const itemsContainer = document.getElementById('cartItemsContainer');
+            const totalPriceEl = document.getElementById('cartTotalPrice');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+
+            badge.innerText = cart.length;
+            if (cart.length > 0) badge.classList.remove('hidden');
+            else badge.classList.add('hidden');
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            totalPriceEl.innerText = `₹${total}`;
+
+            if (cart.length === 0) {
+                itemsContainer.innerHTML = `
+                    <div class="text-center py-12 text-slate-500">
+                        <i class="fa-solid fa-basket-shopping text-3xl mb-2"></i>
+                        <p class="text-xs">Your cart is empty.</p>
+                    </div>
+                `;
+                checkoutBtn.disabled = true;
+                return;
+            }
+
+            checkoutBtn.disabled = false;
+            itemsContainer.innerHTML = cart.map(item => `
+                <div class="flex items-center justify-between p-3 bg-slate-800/50 rounded-xl border border-slate-700/60">
+                    <div class="flex-1 pr-3">
+                        <h4 class="text-xs font-semibold text-slate-200 line-clamp-1">${item.title}</h4>
+                        <span class="text-xs font-bold text-emerald-400">₹${item.price}</span>
+                    </div>
+                    <button onclick="removeFromCart('${item.id}')" class="text-slate-500 hover:text-red-400 p-1 text-sm">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function openCart() {
+            document.getElementById('cartDrawer').classList.remove('translate-x-full');
+        }
+
+        function closeCart() {
+            document.getElementById('cartDrawer').classList.add('translate-x-full');
+        }
+
+        // CHECKOUT & PAYMENT SIMULATION
+        function openCheckoutModal() {
+            closeCart();
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            document.getElementById('paymentTotal').innerText = `₹${total}`;
+            document.getElementById('paymentFlow').classList.remove('hidden');
+            document.getElementById('paymentSuccess').classList.add('hidden');
+            document.getElementById('checkoutModal').classList.remove('hidden');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkoutModal').classList.add('hidden');
+        }
+
+        function processPayment() {
+            const btn = document.getElementById('payConfirmBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Processing Payment...`;
+
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-check-circle"></i> Complete Payment & Download Code`;
+
+                // Render Download Links for purchased products
+                const linksContainer = document.getElementById('downloadLinksContainer');
+                linksContainer.innerHTML = cart.map(item => `
+                    <div class="p-3 bg-slate-800 border border-slate-700 rounded-xl flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-bold text-white">${item.title}</p>
+                            <span class="text-[10px] text-slate-400">Source Zip Package</span>
+                        </div>
+                        <a href="${item.fileUrl}" target="_blank" download class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs rounded-lg transition flex items-center gap-1">
+                            <i class="fa-solid fa-download"></i> Download
+                        </a>
+                    </div>
+                `).join('');
+
+                document.getElementById('paymentFlow').classList.add('hidden');
+                document.getElementById('paymentSuccess').classList.remove('hidden');
+
+                // Clear cart
+                cart = [];
+                updateCartUI();
+            }, 1500);
+        }
+
+        function finishOrder() {
+            closeCheckoutModal();
+        }
+
+        // SELLER ADMIN PANEL (ADD PRODUCTS)
+        function toggleAdminPanel() {
+            const modal = document.getElementById('adminModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function handleAddProduct(event) {
+            event.preventDefault();
+
+            const title = document.getElementById('adminTitle').value;
+            const category = document.getElementById('adminCategory').value;
+            const price = parseFloat(document.getElementById('adminPrice').value);
+            const stack = document.getElementById('adminStack').value.split(',').map(s => s.trim());
+            const description = document.getElementById('adminDesc').value;
+            const fileUrl = document.getElementById('adminFileUrl').value;
+            const demoCode = document.getElementById('adminDemoCode').value;
+
+            const newProduct = {
+                id: 'code-' + Date.now(),
+                title,
+                category,
+                price,
+                rating: 5.0,
+                sales: 1,
+                stack,
+                description,
+                fileUrl,
+                features: ['Instant digital download', 'Clean modular code', 'Full documentation'],
+                includedFiles: ['main_code.zip'],
+                demoCode: demoCode ? demoCode : `<div style="background:#0f172a; padding:10px; color:#10b981; font-size:11px;">Sample Code Execution Ready</div>`
+            };
+
+            products.unshift(newProduct);
+            localStorage.setItem('deva_products', JSON.stringify(products));
+
+            renderProducts();
+            toggleAdminPanel();
+            document.getElementById('adminForm').reset();
+            showToast('New Code Product Published Successfully!');
+        }
+
+        // TOAST NOTIFICATION HELPERS
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-5 right-5 bg-indigo-600 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-2xl z-50 transition transform translate-y-2 opacity-0 flex items-center gap-2';
+            toast.innerHTML = `<i class="fa-solid fa-circle-info text-emerald-300"></i> ${message}`;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 100);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
